@@ -16,19 +16,14 @@ from cycler import cycler
 import gzip
 import shutil
 
-def plot(histograms,processo,oppe,valu):
+def plot(histograms, processo, oppe, valu, outdir):
     '''Plots all histograms. No need to change.'''
-    outdir = './plots_220220/'
-    os.makedirs(outdir, exist_ok=True)
 
     for observable, histogram in histograms.items():
         plt.gcf().clf()
         histogram.plot()
         plt.gca().axvline(x=1100., color='Red')
-#        plt.gcf().savefig(f"{outdir}/{observable}.pdf")
         plt.gcf().savefig(os.path.join(outdir, processo + '_' + oppe + '_' + valu +'.pdf'))
-
-    return outdir
 
         
 
@@ -38,8 +33,7 @@ def setup_histograms():
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
     bins ={
-        'wz_mass' : np.linspace(1000,5000,50),
-#        'jj_mass' : np.linspace(0,5000,50),
+        'mass' : np.linspace(1000,5000,50),
     } 
 
     # No need to change this part
@@ -54,7 +48,7 @@ def setup_histograms():
 
     return histograms
 
-def analyze(processo,oppe,valu):
+def analyze(processo, oppe, valu, outdir):
     '''Event loop + histogram filling'''
 
 #    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220210_process1_ggTozzh/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cutshistat/unweighted_events.lhe'     
@@ -133,13 +127,12 @@ def analyze(processo,oppe,valu):
                 combined_p42 = p42
 
         # --- save file with fit results
-        outfile = './fractions_' + processo + '_' + oppe + '_' + valu + '.json'
+        outfile = os.path.join(outdir, 'fractions_' + processo + '_' + oppe + '_' + valu + '.json')
         with open(outfile,'w') as f:
                 json.dump(limit_list,f)
 
-        # TODO: Fill more histograms around here
-        histograms['wz_mass'].fill(combined_p4.mass, weight=1.)
-#        histograms['jj_mass'].fill(combined_p42.mass, weight=1.)
+        # mass histogram
+        histograms['mass'].fill(combined_p4.mass, weight=1.)
 
     return histograms
 
@@ -179,14 +172,16 @@ def main():
     #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
     #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
 
-    sys.stderr.write('\nOpening file and forming histo...')
-    histograms = analyze(processo,oppe,valu)
+    outdir = './plotsAndFractions_220220/'
+    os.makedirs(outdir, exist_ok=True)
+
+    sys.stderr.write('Opening file and forming histo...')
+    histograms = analyze(processo, oppe, valu, outdir)
     sys.stderr.write('\nHistogram has been filled.')
-#    plot(histograms)
     sys.stderr.write('\nSaving plot...')
-    outdir = plot(histograms,processo,oppe,valu)
+    plot(histograms, processo, oppe, valu, outdir)
     sys.stderr.write(f'\nPlot(s) saved in {outdir}.\n')
 
 if __name__=="__main__":
     main()
-    exit(0)
+    sys.exit(0)
