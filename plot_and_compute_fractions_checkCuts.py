@@ -33,7 +33,8 @@ def setup_histograms():
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
     bins ={
-        'mass' : np.linspace(1000,5000,50),
+        'mass_zzh' : np.linspace(1000,5000,50), # process 1
+#        'mass_zhh' : np.linspace(1000,5000,50), # process 3
     } 
 
     # No need to change this part
@@ -132,7 +133,8 @@ def analyze(processo, oppe, valu, outdir):
                 json.dump(limit_list,f)
 
         # mass histogram
-        histograms['mass'].fill(combined_p4.mass, weight=1.)
+        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
+#        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
 
     return histograms
 
