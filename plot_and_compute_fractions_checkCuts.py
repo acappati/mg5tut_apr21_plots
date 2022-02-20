@@ -23,7 +23,7 @@ def plot(histograms, processo, oppe, valu, outdir):
         plt.gcf().clf()
         histogram.plot()
         plt.gca().axvline(x=1100., color='Red')
-        plt.gcf().savefig(os.path.join(outdir, processo + '_' + oppe + '_' + valu +'.pdf'))
+        plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.pdf'))
 
         
 
