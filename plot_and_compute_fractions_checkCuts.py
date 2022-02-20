@@ -1,3 +1,9 @@
+## --------------
+## use: python plot_and_compute_fractions_checkCuts.py processo operatore valore_operatore
+## -------------
+
+import argparse
+
 import os
 
 import sys
@@ -137,16 +143,38 @@ def analyze(processo,oppe,valu):
 
     return histograms
 
+def argparser(description):
+
+    parser = argparse.ArgumentParser(description=description)
+
+    parser.add_argument('process', help='MADGraph output directory')
+    parser.add_argument('operator', help='the name of operator')
+    parser.add_argument('value', help='the value of the operator')
+
+    args = parser.parse_args()
+
+    return args
+
 def main():
 
-    if (len(sys.argv) < 3):
-        print("specify the process, operator and valu please")
-        sys.exit(1)
+    description = \
+    """
+    script to check cuts of the madgraph process
+    """
+    args = argparser(description)
 
-    # --- out directory
-    processo = sys.argv[1]
-    oppe = sys.argv[2]
-    valu = sys.argv[3]
+    processo = args.process
+    oppe = args.operator
+    valu = args.value
+
+    # if (len(sys.argv) < 3):
+    #     print("specify the process, operator and valu please")
+    #     sys.exit(1)
+
+    # # --- out directory
+    # processo = sys.argv[1]
+    # oppe = sys.argv[2]
+    # valu = sys.argv[3]
 
     #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
     #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
