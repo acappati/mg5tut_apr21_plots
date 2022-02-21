@@ -22,8 +22,10 @@ def plot(histograms, processo, oppe, valu, outdir):
     for observable, histogram in histograms.items():
         plt.gcf().clf()
         histogram.plot()
-        plt.gca().axvline(x=1100., color='Red')
+        plt.gca().axvline(x=1100., color='Red')  # line of the mass cut
+        plt.gcf().text(0.65, 0.7, oppe + ' ' + valu)  # print on plot the operator and the value
         plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.pdf'))
+        plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.png'))
 
         
 
@@ -33,8 +35,8 @@ def setup_histograms():
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
     bins ={
-        'mass_zzh' : np.linspace(1000,5000,50), # process 1
-#        'mass_zhh' : np.linspace(1000,5000,50), # process 3
+#        'mass_zzh' : np.linspace(1000,5000,50), # process 1
+        'mass_zhh' : np.linspace(1000,5000,50), # process 3
     } 
 
     # No need to change this part
@@ -52,18 +54,9 @@ def setup_histograms():
 def analyze(processo, oppe, valu, outdir):
     '''Event loop + histogram filling'''
 
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220210_process1_ggTozzh/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cutshistat/unweighted_events.lhe'     
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220210_process1_ggTozzh/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cuts/unweighted_events.lhe'    
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/211125_process3_ppTozhh/MG5_aMC_v2_7_3_py3_FM0/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cuts/unweighted_events.lhe'     
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220202_process2_ppTozzbb/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cuts/unweighted_events.lhe'    
-
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220211_process1_ggTozzh/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cuts/unweighted_events.lhe'     
-
     
-
-#    lhe_file = '/afs/cern.ch/user/a/acappati/work/ZZH/220219_process1/' +oppe+ '/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_cuts/unweighted_events.lhe'     
-    
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe')
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process3', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 3
     lhe_file_gz = lhe_file + '.gz'
 
     # check if gzipped file exists
@@ -133,8 +126,8 @@ def analyze(processo, oppe, valu, outdir):
                 json.dump(limit_list,f)
 
         # mass histogram
-        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
-#        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
+#        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
+        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
 
     return histograms
 
@@ -162,17 +155,6 @@ def main():
     oppe = args.operator
     valu = args.value
 
-    # if (len(sys.argv) < 3):
-    #     print("specify the process, operator and valu please")
-    #     sys.exit(1)
-
-    # # --- out directory
-    # processo = sys.argv[1]
-    # oppe = sys.argv[2]
-    # valu = sys.argv[3]
-
-    #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
-    #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
 
     outdir = './plotsAndFractions_220220/'
     os.makedirs(outdir, exist_ok=True)
