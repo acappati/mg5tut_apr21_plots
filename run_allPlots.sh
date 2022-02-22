@@ -8,7 +8,7 @@ do
     for v in ${VALUES[@]}
     do
         echo "running operator $o value $v ..."
-        python3 plot_and_compute_fractions_checkCuts.py out_process1_ggTozzh $o $v  # process 1
-#        python3 plot_and_compute_fractions_checkCuts.py out_process3_ppTozhh $o $v  # process 3
+#        python3 plot_and_compute_fractions_checkCuts.py out_process1_ggTozzh $o $v  # process 1
+        python3 plot_and_compute_fractions_checkCuts.py out_process3_ppTozhh $o $v  # process 3
     done
 done

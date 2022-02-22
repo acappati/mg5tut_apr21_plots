@@ -35,8 +35,8 @@ def setup_histograms():
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
     bins ={
-        'mass_zzh' : np.linspace(1000,5000,50), # process 1
-#        'mass_zhh' : np.linspace(1000,5000,50), # process 3
+#        'mass_zzh' : np.linspace(1000,5000,50), # process 1
+        'mass_zhh' : np.linspace(1000,5000,50), # process 3
     } 
 
     # No need to change this part
@@ -55,8 +55,8 @@ def analyze(processo, oppe, valu, outdir):
     '''Event loop + histogram filling'''
 
     
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
-#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process3', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 3
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process3', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 3
     lhe_file_gz = lhe_file + '.gz'
 
     # check if gzipped file exists
@@ -126,8 +126,8 @@ def analyze(processo, oppe, valu, outdir):
                 json.dump(limit_list,f)
 
         # mass histogram
-        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
-#        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
+#        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
+        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
 
     return histograms
 
