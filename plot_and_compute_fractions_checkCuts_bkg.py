@@ -24,6 +24,7 @@ def plot(histograms, processo, oppe, valu, outdir):
         histogram.plot()
         plt.gca().axvline(x=1100., color='Red')
         plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.pdf'))
+        plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.png'))
 
         
 
@@ -33,8 +34,8 @@ def setup_histograms():
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
     bins ={
-        'mass_zzbb' : np.linspace(1000,5000,50),  # process2
-#        'mass_zzbbbb' : np.linspace(1000,5000,50), # process4
+#        'mass_zzbb' : np.linspace(1000,5000,50),  # process2
+        'mass_zbbbb' : np.linspace(1000,5000,50), # process4
     } 
 
     # No need to change this part
@@ -53,7 +54,8 @@ def analyze(processo, oppe, valu, outdir):
     '''Event loop + histogram filling'''
 
     
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220202_process2_ppTozzbb', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe')
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220202_process2_ppTozzbb', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 2
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220303_process4', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 4
     lhe_file_gz = lhe_file + '.gz'
 
     # check if gzipped file exists
@@ -123,8 +125,8 @@ def analyze(processo, oppe, valu, outdir):
                 json.dump(limit_list,f)
 
         # mass histogram
-        histograms['mass_zzbb'].fill(combined_p4.mass, weight=1.) #process2
-#        histograms['mass_zzbbbb'].fill(combined_p4.mass, weight=1.) #process4
+#        histograms['mass_zzbb'].fill(combined_p4.mass, weight=1.) #process2
+        histograms['mass_zbbbb'].fill(combined_p4.mass, weight=1.) #process4
 
     return histograms
 
@@ -164,7 +166,7 @@ def main():
     #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
     #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
 
-    outdir = './plotsAndFractions_220220/'
+    outdir = './plotsAndFractions_220307/'
     os.makedirs(outdir, exist_ok=True)
 
     sys.stderr.write('Opening file and forming histo...')
