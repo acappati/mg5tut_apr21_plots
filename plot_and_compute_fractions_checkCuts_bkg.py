@@ -166,7 +166,7 @@ def main():
     #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
     #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
 
-    outdir = './plotsAndFractions_220307/'
+    outdir = './plotsAndFractions_220410/'
     os.makedirs(outdir, exist_ok=True)
 
     sys.stderr.write('Opening file and forming histo...')
