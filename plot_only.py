@@ -7,16 +7,19 @@ from lhereader import LHEReader
 from matplotlib import pyplot as plt
 import json
 from cycler import cycler
+import gzip
+import shutil
 
 def plot(histograms1,histograms2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
-    outdir = './plots/'
+    outdir = './plots_vsSM_220413/'
     if not os.path.exists(outdir):
         os.makedirs(outdir)
     thelabel = "$m_{" + label + "}$ [GeV]"
+    histname = label + '_mass'
 
-    hist_1 = Hist.new.Var(np.linspace(550,3550,30), name="wz_mass", label=thelabel).Double()
-    hist_2 = Hist.new.Var(np.linspace(550,3550,30), name="wz_mass", label=thelabel).Double()
+    hist_1 = Hist.new.Var(np.linspace(550,3550,30), name=histname, label=thelabel).Double()
+    hist_2 = Hist.new.Var(np.linspace(550,3550,30), name=histname, label=thelabel).Double()
 
     plt.gcf().clf()
     for observable, histogram in histograms1.items():
@@ -43,8 +46,9 @@ def setup_histograms(label):
     
     # Bin edges for each observable
     # TODO: Add your new observables and binnings here
+    keyname = label+'_mass'
     bins ={
-        'wz_mass' : np.linspace(550,3550,30),
+        keyname: np.linspace(550,3550,30),
    #     'jj_mass' : np.linspace(0,5000,50),
     } 
     thelabel = "$m_{" + label + "}$ [GeV]"
@@ -64,9 +68,25 @@ def setup_histograms(label):
 def analyze(processo,oppe,valu,xs,label):
     '''Event loop + histogram filling'''
 
-    lhe_file = '/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/' +processo+ '/Events/run_' + oppe + '_' + valu + '_nocutshistat/unweighted_events.lhe'     
-    os.system("gunzip "+lhe_file+".gz")
-    reader = LHEReader(lhe_file)
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+    print('opening file ', lhe_file)
+    lhe_file_gz = lhe_file + '.gz'
+
+    # check if gzipped file exists
+    if os.path.isfile(lhe_file_gz):
+        # open the gzip (read+byte mode) as file_in context
+        # open the recipient unzipped file (write+byte mode) as file_out context
+        with gzip.open(lhe_file_gz, 'rb') as file_in, open(lhe_file, 'wb') as file_out:
+            # copy content of zipped file to recipient
+            shutil.copyfileobj(file_in, file_out)
+
+    # check if unzipped file exists
+    if os.path.isfile(lhe_file):
+        reader = LHEReader(lhe_file)
+    else:
+        # throw error
+        raise FileNotFoundError(f'{lhe_file} not found!')
+
     histograms = setup_histograms(label)
   
     for event in reader:
@@ -106,7 +126,8 @@ def analyze(processo,oppe,valu,xs,label):
         myweight = float(xs)/40.;
 
         # TODO: Fill more histograms around here
-        histograms['wz_mass'].fill(combined_p4.mass, weight=myweight)
+        keyname = label+'_mass'
+        histograms[keyname].fill(combined_p4.mass, weight=myweight)
      #   histograms['jj_mass'].fill(combined_p42.mass, weight=1.)
 
     os.system("gzip "+lhe_file)
