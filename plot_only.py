@@ -1,3 +1,6 @@
+# run with 
+# python3 plot_only.py processo operatore valore_operatore_1(SM) valore_operatore_2 xsec1_inPb xsec2_inPb label 
+
 import os
 
 import sys
