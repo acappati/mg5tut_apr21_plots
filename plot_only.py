@@ -71,8 +71,8 @@ def setup_histograms(label):
 def analyze(processo,oppe,valu,xs,label):
     '''Event loop + histogram filling'''
 
-#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220219_process1', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process1_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
     print('opening file ', lhe_file)
     lhe_file_gz = lhe_file + '.gz'
 
