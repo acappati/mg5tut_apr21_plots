@@ -43,6 +43,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
     ax1 = fig.add_subplot(3,1,(1,2)) # nrows, ncols, index
     ax1.set_ylabel("cross section [fb/100 GeV]")
     ax1.set_xticks(np.arange(550,3550+300,300)) #set ticks
+    ax1.set_xlim(550,3550) #fix limits of xaxis
 
     val_of_bins_data2, edges_of_bins_data2, patches_data2 = plt.hist(data2, nbins, range=(550,3550), weights=weight2, histtype='step', label="$f_{" + oppe[1:3] + "}/\Lambda^4 =" + valu2 + "$ TeV$^{-4}$")
     val_of_bins_data1, edges_of_bins_data1, patches_data1 = plt.hist(data1, nbins, range=(550,3550), weights=weight1, histtype='step', label="SM")
@@ -69,29 +70,23 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
     # Add an histogram of errors
     ax3 = fig.add_subplot(3,1,3)
     ax3.set_ylabel('BSM/SM')
-    ax3.set_xticks(np.arange(550,3550+300,300)) #set ticks
+    ax3.set_xticks(np.arange(550,3550+300,300)) #set tick
+    ax3.set_xlim(550,3550) #fix limits of xaxis
 
     bincenter = 0.5 * (edges_of_bins_data1[1:] + edges_of_bins_data1[:-1])
     ax3.errorbar(bincenter, ratio, yerr=error, fmt='o', color='k') # ratio with error
     # ax3.hist(error, nbins, range=(550,3550), histtype='step') #error 
     ax3.set_ylim(-0.5,3.)
+
+    # horizontal line
+#    hx = np.linespace()
+    ax3.hlines(y=1., xmin=550, xmax=3550+300, linewidth=1, colors='k', linestyles='dashed')
  
 
 #    ax3.set_xlabel('error')
 #    ax3.set_ylabel('count')
 
 
-
-#     main_ax_artists, subplot_ax_artists = hist_1.plot_ratio(
-#         hist_2,
-#         rp_ylabel="BSM/SM", # y axis label (lower plot) 
-#         rp_num_label=thelabel,
-#         rp_denom_label="SM",
-#         rp_uncert_draw_type="line",  # line or bar
-#         rp_uncertainty_type="poisson",
-#         rp_ylim = [-0.5,5.5]
-#     )
-# #    subplot_ax_artists.set_ylabel("cross section [fb/100 GeV]") # y axis label (top plot)
     plt.savefig(f"{outdir}/{hist_name}.pdf")
 
 
