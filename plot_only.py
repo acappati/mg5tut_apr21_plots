@@ -13,6 +13,9 @@ from cycler import cycler
 import gzip
 import shutil
 
+plt.rcParams.update({'font.size': 22}) # size of labels and axis title
+
+
 def plot(data1,data2,oppe,valu2,xs,xs2,label):
 #def plot(data1, data2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
@@ -24,31 +27,66 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
     hist_name = label + '_mass'
     xaxis_name = "$m_{" + label + "}$ [GeV]"
 
-    nbins = 30
+    xminhist = 550
+    xmaxhist = 3550 
+    nbins = (float(xmaxhist)-float(xminhist))/100. # define bins to have 100 GeV in each bin
+    print('nbins: ',nbins)
 
     fig = plt.figure(figsize=(8.,6.))
 
-    # print(data1)
-    # print(data2)
+    print('length data SM: ',len(data1))
+    print('length data BSM: ',len(data2))
 
-    weight1 = np.full_like(data1, (float(xs)*1000)/float(nbins)) # weight: xsec [pb] transformed in fb divided per number of bins
-    weight2 = np.full_like(data2, (float(xs2)*1000)/float(nbins))
+    weight1 = np.full_like(data1, (float(xs)*1000.)/float(len(data1))) # weight: xsec [pb] transformed in fb divided per number of events
+    weight2 = np.full_like(data2, (float(xs2)*1000.)/float(len(data2)))
 
-    print(weight1)
-    print(weight2)
-    print(xs)
-    print(xs2)
+    print('weight1 array: ', weight1)
+    print('weight2 array: ', weight2)
+    print('length weight1: ', len(weight1))
+    print('length weight2 : ', len(weight2))
+    print('sum of weight1: ', sum(weight1))
+    print('sum of weight2: ', sum(weight2))
+    print('xsec SM: ', xs)
+    print('xsec BSM: ', xs2)
+
+    # reduce datasets (only visible data in hist range)
+    data1_bis = np.asarray([x for x in data1 if xminhist <= x <= xmaxhist])
+    data2_bis = np.asarray([x for x in data2 if xminhist <= x <= xmaxhist])
+
+    weight1_bis = np.full_like(data1_bis, (float(xs)*1000.)/float(len(data1_bis))) # weight: xsec [pb] transformed in fb divided per number of events
+    weight2_bis = np.full_like(data2_bis, (float(xs2)*1000.)/float(len(data2_bis)))
+
+    print('weight1_bis array: ', weight1_bis)
+    print('weight2_bis array: ', weight2_bis)
+    print('length weight1_bis: ', len(weight1_bis))
+    print('length weight2_bis : ', len(weight2_bis))
+    print('sum of weight1_bis: ', sum(weight1_bis))
+    print('sum of weight2_bis: ', sum(weight2_bis))
+    print('xsec SM: ', xs)
+    print('xsec BSM: ', xs2)
+    
 
     # Plot two distributions on the same plot
-    ax1 = fig.add_subplot(3,1,(1,2)) # nrows, ncols, index
+    ax1 = fig.add_subplot(3, 1, (1,2)) # nrows, ncols, index 
     ax1.set_ylabel("cross section [fb/100 GeV]")
-    ax1.set_xticks(np.arange(550,3550+300,300)) #set ticks
-    ax1.set_xlim(550,3550) #fix limits of xaxis
+    ax1.set_xticklabels([]) #remove labels of x axis
+    #ax1.set_xticks(np.arange(550,3550+300,300)) #set ticks
+    ax1.set_xlim(xminhist,xmaxhist) #fix limits of xaxis
 
-    val_of_bins_data2, edges_of_bins_data2, patches_data2 = plt.hist(data2, nbins, range=(550,3550), weights=weight2, histtype='step', label="$f_{" + oppe[1:3] + "}/\Lambda^4 =" + valu2 + "$ TeV$^{-4}$")
-    val_of_bins_data1, edges_of_bins_data1, patches_data1 = plt.hist(data1, nbins, range=(550,3550), weights=weight1, histtype='step', label="SM")
+    val_of_bins_data2, edges_of_bins_data2, patches_data2 = plt.hist(data2_bis, int(nbins), range=(xminhist, xmaxhist), density=False, weights=weight2_bis, histtype='step', label="$f_{" + oppe[1:3] + "}/\Lambda^4 =" + valu2 + "$ TeV$^{-4}$")
+    val_of_bins_data1, edges_of_bins_data1, patches_data1 = plt.hist(data1_bis, int(nbins), range=(xminhist, xmaxhist), density=False, weights=weight1_bis, histtype='step', label="SM")
 
-    print(val_of_bins_data1)
+    print('bin content hist SM: ', val_of_bins_data1)
+    print('bin content hist BSM: ', val_of_bins_data2)
+    print('edges of bin hist SM: ', edges_of_bins_data1)
+    print('edges of bin hist BSM: ',edges_of_bins_data2)
+    print('area hist SM: ', sum(np.diff(edges_of_bins_data1)*val_of_bins_data1))
+    print('area hist BSM: ', sum(np.diff(edges_of_bins_data2)*val_of_bins_data2))
+    len1 = len(edges_of_bins_data1)-1
+    len2 = len(edges_of_bins_data2)-1
+    print(len1, len2)
+    print('area hist SM: ', sum(val_of_bins_data1[0:len1]))
+    print('area hist BSM: ', sum(val_of_bins_data2[0:len2]))
 
     ax1.legend()
 
@@ -60,33 +98,35 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
     print("ratio:", ratio)
 
     # Compute error on ratio (null if cannot be computed)
-    error = np.divide(val_of_bins_data2 * np.sqrt(val_of_bins_data1) + val_of_bins_data1 * np.sqrt(val_of_bins_data2),
-                      np.power(val_of_bins_data1, 2),
-                      where=(val_of_bins_data1 != 0))
+#    error = np.divide(val_of_bins_data2 * np.sqrt(val_of_bins_data1) + val_of_bins_data1 * np.sqrt(val_of_bins_data2), np.power(val_of_bins_data1, 2), where=(val_of_bins_data1 != 0))
+    error = ratio * np.sqrt(np.divide(1., val_of_bins_data2, where=(val_of_bins_data2 != 0)) +
+                            np.divide(1., val_of_bins_data1, where=(val_of_bins_data1 != 0))
+                            )
 
     print("error:", error)
  
     # Add the ratio on the existing plot
     # Add an histogram of errors
-    ax3 = fig.add_subplot(3,1,3)
+    ax3 = fig.add_subplot(3, 1, 3)
     ax3.set_ylabel('BSM/SM')
-    ax3.set_xticks(np.arange(550,3550+300,300)) #set tick
-    ax3.set_xlim(550,3550) #fix limits of xaxis
+    #ax3.set_xticks(np.arange(550,3550+300,300)) #set tick
+    ax3.set_xlim(xminhist,xmaxhist) #fix limits of xaxis
 
     bincenter = 0.5 * (edges_of_bins_data1[1:] + edges_of_bins_data1[:-1])
     ax3.errorbar(bincenter, ratio, yerr=error, fmt='o', color='k') # ratio with error
     # ax3.hist(error, nbins, range=(550,3550), histtype='step') #error 
     ax3.set_ylim(-0.5,3.)
+    ax3.set_yticks([0, 1, 2])
 
     # horizontal line
 #    hx = np.linespace()
-    ax3.hlines(y=1., xmin=550, xmax=3550+300, linewidth=1, colors='k', linestyles='dashed')
+    ax3.hlines(y=1., xmin=xminhist, xmax=xmaxhist, linewidth=1, colors='k', linestyles='dashed')
  
 
 #    ax3.set_xlabel('error')
 #    ax3.set_ylabel('count')
 
-
+    plt.subplots_adjust(hspace=0)
     plt.savefig(f"{outdir}/{hist_name}.pdf")
 
 
