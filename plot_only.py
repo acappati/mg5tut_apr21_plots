@@ -13,14 +13,14 @@ from cycler import cycler
 import gzip
 import shutil
 
-plt.rcParams.update({'font.size': 12}) # size of labels and axis title
+plt.rcParams.update({'font.size': 16}) # size of labels and axis title
 
 
 def plot(data1,data2,oppe,valu2,xs,xs2,label):
 #def plot(data1, data2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
 
-    outdir = './plots_vsSM_220414_200kevt/'
+    outdir = './plots_vsSM_220508_200kevt/'
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
@@ -116,8 +116,8 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 def analyze(processo,oppe,valu):
     '''Event loop + histogram filling'''
 
-#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process1_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process1_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
     lhe_file_gz = lhe_file + '.gz'
 
     # check if gzipped file exists
@@ -175,8 +175,7 @@ def main():
     xs2 = sys.argv[6]
     label = sys.argv[7]
 
-    #histograms = analyze('/afs/cern.ch/work/c/covarell/mg5_amcatnlo/test-dim8-zzh/MG5_aMC_v2_7_3_py3/vbf-hh-mhhcut/Events/run_05/unweighted_events.lhe')
-    #histograms = analyze('/afs/cern.ch/user/c/covarell/work/mg5_amcatnlo/dim8-hh/MG5_aMC_v2_7_3_py3/vbf-wpmz-4f/Events/run_FM4_20_cutshistat/unweighted_events.lhe')
+
     data1 = analyze(processo,oppe,valu)
     data2 = analyze(processo,oppe,valu2)
     plot(data1,data2,oppe,valu2,xs,xs2,label)
