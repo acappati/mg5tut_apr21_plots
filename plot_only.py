@@ -20,7 +20,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 #def plot(data1, data2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
 
-    outdir = './plots_vsSM_220508_200kevt/'
+    outdir = './plots_vsSM_220517_200kevt/'
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
@@ -29,6 +29,8 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 
     xminhist = 550
     xmaxhist = 3550 
+    ratio_minylim = -0.5 
+    ratio_maxylim = 3.
     nbins = (float(xmaxhist)-float(xminhist))/100. # define bins to have 100 GeV in each bin
     print('nbins: ',nbins)
 
@@ -91,6 +93,18 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
                             )
 
     print("error:", error)
+
+    # some checks
+    for i in range(len(ratio)):
+        # if ratio is 0, put the value to a huge number so it is outside the range of the plot
+        if (abs(ratio[i]) < 0.00001):
+            ratio[i] = 999.
+        # if the ratio point is outside the range of the ratio plot, don't plot the error bar
+        if (ratio[i] > ratio_maxylim):
+            error[i] = 0.
+
+    print("ratio:", ratio)
+    print("error:", error)
  
     # Add the ratio on the existing plot
     # Add an histogram of errors
@@ -101,7 +115,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 
     bincenter = 0.5 * (edges_of_bins_data1[1:] + edges_of_bins_data1[:-1])
     ax3.errorbar(bincenter, ratio, yerr=error, fmt='o', color='k') # ratio with error
-    ax3.set_ylim(-0.5,3.)
+    ax3.set_ylim(ratio_minylim, ratio_maxylim)
     ax3.set_yticks([0, 1, 2])
 
     # horizontal line
@@ -116,8 +130,8 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 def analyze(processo,oppe,valu):
     '''Event loop + histogram filling'''
 
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process1_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
-#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process1_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # process 1
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
     lhe_file_gz = lhe_file + '.gz'
 
     # check if gzipped file exists
