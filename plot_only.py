@@ -20,7 +20,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 #def plot(data1, data2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
 
-    outdir = './plots_vsSM_230908_4kevt/'
+    outdir = './plots_vsSM_231010_4kevt/'
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
@@ -123,7 +123,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
  
 
     plt.subplots_adjust(hspace=0)
-    plt.savefig(f"{outdir}/{hist_name}.pdf")
+    plt.savefig(f"{outdir}/{hist_name}.png")
 
 
 
@@ -137,7 +137,10 @@ def analyze(processo,oppe,valu):
 #    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '220414_process3_nocuts', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_nocuts', 'unweighted_events.lhe') # process 3
 
     ### --- pp->zzh
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '230906_v2_ppTozzh', oppe, 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
+
+    ### --- pp->w+zh
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
 
 
     lhe_file_gz = lhe_file + '.gz'
