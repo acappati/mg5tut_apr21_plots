@@ -20,7 +20,7 @@ def plot(data1,data2,oppe,valu2,xs,xs2,label):
 #def plot(data1, data2,oppe,valu,label):
     '''Plots all histograms. No need to change.'''
 
-    outdir = './plots_vsSM_231010_4kevt/'
+    outdir = './plots_vsSM_240225_4kevt/'
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
@@ -140,7 +140,8 @@ def analyze(processo,oppe,valu):
 #    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
 
     ### --- pp->w+zh
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '240225', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') # just a test
 
 
     lhe_file_gz = lhe_file + '.gz'

@@ -24,8 +24,8 @@ def plot(histograms, processo, oppe, valu, outdir):
         histogram.plot()
         plt.gca().axvline(x=1100., color='Red')  # line of the mass cut
         plt.gcf().text(0.65, 0.9, oppe + ' ' + valu)  # print on plot the operator and the value
-        plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.pdf'))
-        plt.gcf().savefig(os.path.join(outdir, 'plot_' + processo + '_' + oppe + '_' + valu +'.png'))
+        plt.gcf().savefig(os.path.join(outdir, 'plot_' + observable + '_' + processo + '_' + oppe + '_' + valu +'.pdf'))
+        plt.gcf().savefig(os.path.join(outdir, 'plot_' + observable + '_' + processo + '_' + oppe + '_' + valu +'.png'))
 
         
 
@@ -36,8 +36,10 @@ def setup_histograms():
     # TODO: Add your new observables and binnings here
     bins ={
 #        'mass_zzh' : np.linspace(1000,5000,50), # final state zzh
-        'mass_wzh' : np.linspace(1000,5000,50), # final state w+zh
+#        'mass_wzh' : np.linspace(1000,5000,50), # final state w+zh
 #        'mass_zhh' : np.linspace(1000,5000,50), # final state zhh
+         'mass_zh'  : np.linspace(1000,5000,50), # process pp->zhjj
+         'mass_jj'  : np.linspace(0,5000,50),    # process pp->zhjj
     } 
 
     # No need to change this part
@@ -65,7 +67,14 @@ def analyze(processo, oppe, valu, outdir):
 #    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
 
     ### --- pp->w+zh
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '240225', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
+
+    ### --- pp->zhjj
     lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
+
+
+
 
     lhe_file_gz = lhe_file + '.gz'
 
@@ -137,8 +146,11 @@ def analyze(processo, oppe, valu, outdir):
 
         # mass histogram
 #        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
-        histograms['mass_wzh'].fill(combined_p4.mass, weight=1.)
+#        histograms['mass_wzh'].fill(combined_p4.mass, weight=1.)
 #        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
+        histograms['mass_zh'].fill(combined_p4.mass, weight=1.)  # process pp->zhjj
+        histograms['mass_jj'].fill(combined_p42.mass, weight=1.) # process pp->zhjj
+
 
     return histograms
 
