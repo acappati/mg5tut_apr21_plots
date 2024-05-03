@@ -36,10 +36,10 @@ def setup_histograms():
     # TODO: Add your new observables and binnings here
     bins ={
 #        'mass_zzh' : np.linspace(1000,5000,50), # final state zzh
-#        'mass_wzh' : np.linspace(1000,5000,50), # final state w+zh
+         'mass_wzh' : np.linspace(1000,5000,50), # final state w+zh
 #        'mass_zhh' : np.linspace(1000,5000,50), # final state zhh
-         'mass_zh'  : np.linspace(1000,5000,50), # process pp->zhjj
-         'mass_jj'  : np.linspace(0,5000,50),    # process pp->zhjj
+#        'mass_zh'  : np.linspace(1000,5000,50), # process pp->zhjj
+#        'mass_jj'  : np.linspace(0,5000,50),    # process pp->zhjj
     } 
 
     # No need to change this part
@@ -68,10 +68,10 @@ def analyze(processo, oppe, valu, outdir):
 
     ### --- pp->w+zh
 #    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
-#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '240225', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
+    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '240301', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
 
     ### --- pp->zhjj
-    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
+#    lhe_file = os.path.join('/afs', 'cern.ch', 'user', 'a', 'acappati', 'work', 'ZZH', '231010_v2', 'MG5_aMC_v2_7_3_py3', processo, 'Events', 'run_' + oppe + '_' + valu + '_cuts', 'unweighted_events.lhe') 
 
 
 
@@ -146,10 +146,10 @@ def analyze(processo, oppe, valu, outdir):
 
         # mass histogram
 #        histograms['mass_zzh'].fill(combined_p4.mass, weight=1.) # process 1
-#        histograms['mass_wzh'].fill(combined_p4.mass, weight=1.)
+        histograms['mass_wzh'].fill(combined_p4.mass, weight=1.)
 #        histograms['mass_zhh'].fill(combined_p4.mass, weight=1.) # process 3
-        histograms['mass_zh'].fill(combined_p4.mass, weight=1.)  # process pp->zhjj
-        histograms['mass_jj'].fill(combined_p42.mass, weight=1.) # process pp->zhjj
+#        histograms['mass_zh'].fill(combined_p4.mass, weight=1.)  # process pp->zhjj
+#        histograms['mass_jj'].fill(combined_p42.mass, weight=1.) # process pp->zhjj
 
 
     return histograms
@@ -179,7 +179,7 @@ def main():
     valu = args.value
 
 
-    outdir = './plotsAndFractions_231010/'
+    outdir = './plotsAndFractions_240503/'
     os.makedirs(outdir, exist_ok=True)
 
     sys.stderr.write('Opening file and forming histo...')
